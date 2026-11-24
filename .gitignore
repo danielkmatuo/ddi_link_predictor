@@ -1,0 +1,6 @@
+data/baseline/
+data/markov/
+data/kernel/
+results/
+__pycache__/
+.venv/

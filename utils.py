@@ -17,21 +17,15 @@ def find_file(target):
     return target_path
 
 def create_csv_file(data: pd.DataFrame, file_name, feats_group, dir_name="test"):
-    allowed_dirs = ["results", "data"] # change if you want to create more directories
+    allowed_dirs = ["results", "data"]
 
     if dir_name not in allowed_dirs:
         raise ValueError("Not a valid directory")
 
     cwd = os.getcwd()
-    group_dir = os.path.join(dir_name, feats_group)
+    group_dir = os.path.join(cwd, dir_name, feats_group)
 
-    if not os.path.exists(os.path.join(cwd, group_dir)) and dir_name != "data":
-        os.mkdir(dir_name)
-        os.mkdir(group_dir)
-        data_path = os.path.join(cwd, group_dir, file_name)
-        data.to_csv(data_path, index=False) if dir_name == "data" else data.to_csv(data_path, index=True)
-        return
-    else:
-        data_path = os.path.join(cwd, group_dir, file_name)
-        data.to_csv(data_path, index=False) if dir_name == "data" else data.to_csv(data_path, index=True)
-        return 
+    os.makedirs(group_dir, exist_ok=True)
+
+    data_path = os.path.join(group_dir, file_name)
+    data.to_csv(data_path, index=(dir_name != "data"))
